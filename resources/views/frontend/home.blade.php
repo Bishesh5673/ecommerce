@@ -39,7 +39,7 @@
                         </div>
                         <!-- Modal body -->
                         <div class="p-4 md:p-5 space-y-4">
-                            <form action="" method="post">
+                            <form action="{{ route('seller_store') }}" method="post">
                                 @csrf
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
@@ -92,5 +92,24 @@
             </div>
 
         </div>
+    </section>
+
+    <section class="">
+        <div class="container py-10 flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-center">
+                    About Us
+                </h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, exercitationem dolorum. Quaerat,
+                    quia. Non hic ea incidunt officia ratione repudiandae voluptates ut sit dolor. Delectus ducimus
+                    laborum at velit sunt?
+                </p>
+
+                <a href="{{ route('about') }}">read more</a>
+            </div>
+
+            <img src="https://media.istockphoto.com/id/1221653457/photo/close-up-of-a-touchscreen-social-media-concept.jpg?s=612x612&w=0&k=20&c=thcgiLGWFoRNMrMiDXDGUGPy50i9jhXhiHSy-vokyqI="
+                alt="">
     </section>
 </x-frontend-layout>
