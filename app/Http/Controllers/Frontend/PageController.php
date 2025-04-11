@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Mail\SellerRequestNotification;
 use App\Models\Admin;
+use App\Models\Product;
 use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +15,8 @@ class PageController extends Controller
 {
     public function home()
     {
-        return view('frontend.home');
+        $offer_products = Product::where('stock', true)->where('discount', '>', 0)->get();
+        return view('frontend.home', compact('offer_products'));
     }
 
     public function about()
@@ -54,5 +56,11 @@ class PageController extends Controller
         // }
         Mail::to($admins)->send(new SellerRequestNotification($data));
         return redirect()->route('home');
+    }
+    public function compare(Request $request)
+    {
+        $q = $request->q;
+        $results = Product::where('name',"like","%$q%")->orderBy('price','asc')->get();
+        return view('frontend.compare', compact('results','q'));
     }
 }

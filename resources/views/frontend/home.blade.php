@@ -94,6 +94,22 @@
         </div>
     </section>
 
+    <section>
+        <div class="container py-10">
+            <h1 class="text-3xl font-bold text-center">
+                Get Featured Products with limited time offer!
+            </h1>
+
+            <div class="grid grid-cols-3 gap-4 py-5">
+
+                @foreach ($offer_products as $product)
+                   <x-product-card :product="$product" />
+                @endforeach
+
+            </div>
+        </div>
+    </section>
+
     <section class="">
         <div class="container py-10 flex items-center justify-between">
             <div>

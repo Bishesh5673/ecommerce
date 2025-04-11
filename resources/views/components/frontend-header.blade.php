@@ -17,9 +17,9 @@
                 <img class="h-12" src="https://codeit.com.np/storage/01JJ6HWH8RP35HYNCEBFXVYZKF.png" alt="Logo">
             </div>
             <div>
-                <form action="" method="get">
+                <form action="{{route('compare')}}" method="get">
                     <div class="flex items-center">
-                        <input type="search" name="search" id="search" placeholder="Search">
+                        <input type="search" name="q" id="search" placeholder="Search">
                         <button type="submit" class="bg-[#ababab] border border-[#ababab] text-white px-4 py-2">compare <i
                                 class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
