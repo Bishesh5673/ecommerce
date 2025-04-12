@@ -17,6 +17,6 @@
             Price: <span class="text-xl">Rs. {{ $product->price }}</span>
         </p>
 
-        <a href="" class="underline text-primary">view details</a>
+        <a href="{{ route('product', $product->id) }}" class="underline text-primary">view details</a>
     </div>
 </div>

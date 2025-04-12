@@ -26,8 +26,8 @@
                 </form>
             </div>
             <div class="flex gap-2 items-center">
-                <a href="" class="btn-primary">SignIn</a>
-                <a href="" class="btn-secondary">SignUp</a>
+                <a href="{{route('login')}}" class="btn-primary">SignIn</a>
+                <a href="{{route('register')}}" class="btn-secondary">SignUp</a>
             </div>
         </div>
     </nav>
