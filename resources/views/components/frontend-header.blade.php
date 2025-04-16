@@ -26,8 +26,16 @@
                 </form>
             </div>
             <div class="flex gap-2 items-center">
-                <a href="{{route('login')}}" class="btn-primary">SignIn</a>
-                <a href="{{route('register')}}" class="btn-secondary">SignUp</a>
+                @if (!Auth::user())
+                    <a href="{{ route('login') }}" class="btn-primary">SignIn</a>
+                    <a href="{{ route('register') }}" class="btn-secondary">SignUp</a>
+                @else
+                    <form action="{{ route('logout') }}" method="post">
+                        @csrf
+                        <a href="{{ route('carts') }}" class="btn-secondary">carts</a>
+                        <button type="submit" class="bg-red-600 px-2 py-1 text-white rounded">Logout</button>
+                    </form>
+                @endif
             </div>
         </div>
     </nav>
