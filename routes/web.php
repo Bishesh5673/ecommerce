@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\OrderController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
@@ -28,6 +29,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/add-to-cart', [CartController::class, 'add_to_cart'])->name('add_to_cart');
     Route::put('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
     Route::delete('/cart/{id}', [CartController::class, 'deleteCart'])->name('cart.delete');
+
+    Route::post('/order', [OrderController::class, 'order'])->name('order');
+    Route::get('/khalti-callback', [OrderController::class, 'khalti_callback'])->name('khalti_callback');
 });
 
 Route::get('/google/login', function () {

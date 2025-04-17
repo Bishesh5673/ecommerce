@@ -6,6 +6,9 @@
             </h1>
 
             @forelse ($carts as $sellerId => $items)
+                @php
+                    $totalAmt = 0;
+                @endphp
                 <div class="border border-gray-300 rounded-lg p-4 mb-6">
                     <h2 class="text-xl font-semibold mb-3">
                         Seller: {{ $items->first()->product->seller->name ?? 'Unknown Seller' }}
@@ -13,6 +16,9 @@
 
                     <ul class="space-y-4">
                         @foreach ($items as $cart)
+                            @php
+                                $totalAmt += $cart->amount;
+                            @endphp
                             <li class="flex justify-between items-center border-b pb-2">
                                 <div>
                                     <p class="font-medium">{{ $cart->product->name }}</p>
@@ -25,18 +31,26 @@
                             </li>
 
                             <div class="flex justify-end gap-2">
-                                <form action="{{route('cart.delete', $cart->id)}}" method="post">
+                                <form action="{{ route('cart.delete', $cart->id) }}" method="post">
                                     @csrf
                                     @method('delete')
-                                    <button type="submit" class="bg-red-600 px-2 py-1 text-white rounded">Remove</button>
+                                    <button type="submit"
+                                        class="bg-red-600 px-2 py-1 text-white rounded">Remove</button>
                                 </form>
 
-                                <form action="" method="post">
-                                    @csrf
-                                    <button type="submit" class="bg-secondary px-2 py-1 text-white rounded">Order</button>
-                                </form>
                             </div>
                         @endforeach
+                        <div>
+                            <b>Total:</b>RS.{{ $totalAmt }}
+                        </div>
+
+                        <form action="{{ route('order') }}" method="post">
+                            @csrf
+                            <input type="text" name="total_amount" value="{{ $totalAmt }}" hidden>
+                            <input type="text" name="seller_id" value="{{ $items->first()->product->seller->id }}"
+                                hidden>
+                            <button type="submit" class="bg-secondary px-2 py-1 text-white rounded">Order</button>
+                        </form>
                     </ul>
                 </div>
             @empty
