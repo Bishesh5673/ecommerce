@@ -32,7 +32,11 @@
                 @else
                     <form action="{{ route('logout') }}" method="post">
                         @csrf
-                        <a href="{{ route('carts') }}" class="btn-secondary">carts</a>
+                        <a href="{{ route('carts') }}" class="btn-secondary">carts
+                            <span>
+                                {{ Auth::user()->carts->count() }}
+                            </span>
+                        </a>
                         <button type="submit" class="bg-red-600 px-2 py-1 text-white rounded">Logout</button>
                     </form>
                 @endif

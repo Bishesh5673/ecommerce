@@ -18,6 +18,7 @@ return new class extends Migration
             $table->double('total_amount');
             $table->string('status');
             $table->string('payment_method');
+            $table->boolean('is_new')->default(true);
             $table->timestamps();
         });
     }

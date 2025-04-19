@@ -4,6 +4,7 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\OrderController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +34,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/order', [OrderController::class, 'order'])->name('order');
     Route::get('/khalti-callback', [OrderController::class, 'khalti_callback'])->name('khalti_callback');
 });
+
+Route::get("/order/invoice/{id}", function ($id) {
+    $order = Order::find($id);
+    return view('invoice', compact('order'));
+})->name('invoice');
 
 Route::get('/google/login', function () {
     return Socialite::driver('google')->redirect();

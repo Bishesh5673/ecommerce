@@ -55,16 +55,16 @@ class OrderController extends Controller
             [
                 'return_url' => route('khalti_callback'),
                 'website_url' => route('home'),
-                'amount' => $request->total_amount * 100,
+                'amount' => $request->total_amount,
                 'purchase_order_id' => $order->id,
                 'purchase_order_name' => $order->seller->name,
             ]
         );
-
         if ($response->successful()) {
             $paymentUrl = $response['payment_url'];
             return redirect($paymentUrl);
-        } else {
+        }
+        else {
             return back()->with('error', 'Failed to initiate Khalti payment.');
         }
 

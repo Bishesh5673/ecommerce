@@ -53,6 +53,103 @@ class SellerPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+
+            ->renderHook('panels::body.end', function () {
+                $soundUrl = asset('sounds/notification.mp3');
+
+                return <<<HTML
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        let audioCtx;
+                        let isUnlocked = false;
+                        let notificationAudio = new Audio("{$soundUrl}");
+
+                        async function unlockAudioContextAndPlay() {
+                            try {
+                                if (!audioCtx) {
+                                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                                    const buffer = audioCtx.createBuffer(1, 1, 22050);
+                                    const source = audioCtx.createBufferSource();
+                                    source.buffer = buffer;
+                                    source.connect(audioCtx.destination);
+                                    source.start(0);
+                                }
+
+                                isUnlocked = true;
+                                console.log("✅ AudioContext unlocked");
+                                document.getElementById("enable-sound-btn")?.remove();
+
+                                // Ask notification permission
+                                if (Notification.permission !== "granted") {
+                                    Notification.requestPermission().then(p => {
+                                        console.log("🔔 Notification permission:", p);
+                                    });
+                                }
+                            } catch (err) {
+                                console.warn("Unlock failed:", err);
+                            }
+                        }
+
+                        function playNotificationSound() {
+                            if (!isUnlocked || !audioCtx || audioCtx.state !== 'running') {
+                                console.warn("⚠️ AudioContext not unlocked or suspended.");
+                                return;
+                            }
+
+                            const audio = new Audio("{$soundUrl}");
+                            audio.play().then(() => {
+                                console.log("🔊 Notification sound played.");
+                            }).catch(err => {
+                                console.error("❌ Failed to play sound:", err);
+                            });
+                        }
+
+                        function showDesktopNotification() {
+                            if (Notification.permission === "granted") {
+                                const notification = new Notification("🛒 New Order Received", {
+                                    body: "A new order just arrived!",
+                                    icon: "/favicon.ico",
+                                    silent: true // prevents double sound if browser adds default chime
+                                });
+
+                                notification.onclick = () => {
+                                    window.focus();
+                                };
+                            }
+                        }
+
+                        // Create and show enable button
+                        const enableBtn = document.createElement("button");
+                        enableBtn.id = "enable-sound-btn";
+                        enableBtn.textContent = "Enable Sound Notification";
+                        Object.assign(enableBtn.style, {
+                            position: "fixed",
+                            bottom: "20px",
+                            right: "20px",
+                            zIndex: "9999",
+                            padding: "10px 16px",
+                            backgroundColor: "#06b6d4",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)"
+                        });
+                        document.body.appendChild(enableBtn);
+
+                        enableBtn.addEventListener("click", unlockAudioContextAndPlay);
+
+                        document.addEventListener("livewire:init", () => {
+                            Livewire.on("play-sound", () => {
+                                console.log("🔔 play-sound triggered");
+                                playNotificationSound();
+                                showDesktopNotification();
+                            });
+                        });
+                    });
+                </script>
+                HTML;
+            });
     }
 }
